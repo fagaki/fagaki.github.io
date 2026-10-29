@@ -12,9 +12,9 @@ The whole site exists in every language listed in [_data/languages.yml](_data/la
 
 | Language | Home page | A recipe |
 |---|---|---|
-| Greek (default) | `/el/` | `/el/fakes.html` |
-| English | `/en/` | `/en/fakes.html` |
-| French, German, Italian, Spanish, Portuguese, Farsi | `/fr/`, `/de/`, `/it/`, `/es/`, `/pt/`, `/fa/` | `/fr/fakes.html`, ... |
+| Greek (default) | `/el/` | `/el/makaronia-me-kima.html` |
+| English | `/en/` | `/en/makaronia-me-kima.html` |
+| French, German, Italian, Spanish, Portuguese, Farsi | `/fr/`, `/de/`, `/it/`, `/es/`, `/pt/`, `/fa/` | `/fr/makaronia-me-kima.html`, ... |
 
 `https://fagaki.github.io/` sends visitors to `/el/`, or to the language they last picked in the menu. The language menu in the header opens the same page in another language.
 
@@ -55,7 +55,7 @@ ingredients:
 
 Tips:
 
-- **File name = URL.** Use Latin letters, digits and hyphens (`moussaka.md`, `banana-bread.md`), and the same name in every language folder. Never use `index`.
+- **File name = URL.** Use Latin letters, digits and hyphens (`moussaka.md`, `makaronia-me-kima.md`), and the same name in every language folder. Never use `index`.
 - **Ingredients** are a YAML list, one item per line, each starting with `- `. Put quotes around an item that contains a colon.
 - **Steps** go below the second `---` as a numbered Markdown list.
 - A recipe missing in some language simply doesn't appear on that language's home page; the menu then points to that language's home page.

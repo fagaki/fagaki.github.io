@@ -150,7 +150,8 @@ h1.tagline { font-size: 1.5rem; }
   color: var(--muted);
 }
 
-.steps li { margin-bottom: 0.6rem; }
+.steps li { margin-bottom: 0.6rem; padding-inline-start: 0.3rem; }
+.steps li::marker { color: var(--accent); font-weight: 700; }
 .steps ol:lang(fa) { list-style-type: persian; }
 
 /* Print: just the recipe, black on white */
