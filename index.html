@@ -1,0 +1,44 @@
+---
+layout: default
+---
+{% assign recipes = site.recipes | sort_natural: "title" %}
+{% assign langs = site.recipes | map: "lang" | uniq | sort %}
+{% assign tags = "" | split: "" %}
+{% for recipe in site.recipes %}{% if recipe.tags %}{% assign tags = tags | concat: recipe.tags %}{% endif %}{% endfor %}
+{% assign tags = tags | uniq | sort_natural %}
+
+<h1>{{ site.title }}</h1>
+<p>{{ site.description }}</p>
+
+<div class="filters no-print">
+  <input type="search" id="search" placeholder="Search by name, ingredient or cook" aria-label="Search recipes">
+  <select id="filter-lang" aria-label="Language">
+    <option value="">All languages</option>
+    {% for code in langs %}
+    {% assign language = site.data.languages | where: "code", code | first %}
+    <option value="{{ code }}">{{ language.name | default: code }}</option>
+    {% endfor %}
+  </select>
+  <select id="filter-tag" aria-label="Tag">
+    <option value="">All tags</option>
+    {% for tag in tags %}
+    <option value="{{ tag }}">{{ tag }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<ul class="recipe-list" id="recipe-list">
+  {% for recipe in recipes %}
+  {% assign language = site.data.languages | where: "code", recipe.lang | first %}
+  <li data-lang="{{ recipe.lang }}"
+      data-tags="{{ recipe.tags | join: ',' | escape }}"
+      data-text="{{ recipe.title | escape }} {{ recipe.author | escape }} {{ recipe.tags | join: ' ' | escape }} {{ recipe.ingredients | join: ' ' | escape }}">
+    <a href="{{ recipe.url | relative_url }}" lang="{{ recipe.lang }}" dir="auto">{{ recipe.title }}</a>
+    <span class="meta">
+      {% if recipe.author %}by <span lang="{{ recipe.lang }}">{{ recipe.author }}</span> &middot; {% endif %}{{ language.name | default: recipe.lang }}
+      {% for tag in recipe.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </span>
+  </li>
+  {% endfor %}
+</ul>
+<p id="no-results" hidden>No recipes match your search.</p>

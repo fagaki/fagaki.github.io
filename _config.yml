@@ -1,0 +1,29 @@
+title: Fagaki
+description: Home recipes from amateur cooks, in many languages.
+url: https://fagaki.github.io
+baseurl: ""
+lang: en
+
+collections:
+  recipes:
+    output: true
+    permalink: /:name.html
+
+defaults:
+  - scope:
+      path: ""
+      type: recipes
+    values:
+      layout: recipe
+      lang: en
+
+plugins:
+  - jekyll-sitemap
+
+exclude:
+  - README.md
+  - TEMPLATE.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - vendor

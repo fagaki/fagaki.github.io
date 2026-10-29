@@ -1,0 +1,52 @@
+---
+layout: default
+---
+{% assign language = site.data.languages | where: "code", page.lang | first %}
+<article class="recipe" dir="auto">
+  <h1>{{ page.title }}</h1>
+
+  <p class="meta" lang="{{ site.lang }}">
+    {% if page.author %}<span>by <strong lang="{{ page.lang }}">{{ page.author }}</strong></span>{% endif %}
+    <span>{{ language.name | default: page.lang }}</span>
+    {% for tag in page.tags %}<a class="tag" href="{{ '/' | relative_url }}?tag={{ tag | url_encode }}">{{ tag }}</a>{% endfor %}
+  </p>
+
+  {% if page.ingredients %}
+  <section>
+    <h2 lang="{{ site.lang }}">Ingredients</h2>
+    <ul class="ingredients" id="ingredients">
+      {% for item in page.ingredients %}
+      <li><label><input type="checkbox"> <span>{{ item | escape }}</span></label></li>
+      {% endfor %}
+    </ul>
+    <button type="button" id="reset-ingredients" class="no-print" lang="{{ site.lang }}">Reset</button>
+  </section>
+  {% endif %}
+
+  <section>
+    <h2 lang="{{ site.lang }}">Recipe</h2>
+    <div class="steps">
+      {{ content }}
+    </div>
+  </section>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Recipe",
+  "name": {{ page.title | jsonify }},
+  "inLanguage": {{ page.lang | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "recipeInstructions": {{ content | strip_html | normalize_whitespace | strip | jsonify }}
+  {%- if page.author %},
+  "author": { "@type": "Person", "name": {{ page.author | jsonify }} }
+  {%- endif %}
+  {%- if page.tags %},
+  "keywords": {{ page.tags | join: ", " | jsonify }}
+  {%- endif %}
+  {%- if page.ingredients %},
+  "recipeIngredient": {{ page.ingredients | jsonify }}
+  {%- endif %}
+}
+</script>
