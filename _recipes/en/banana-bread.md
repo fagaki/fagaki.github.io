@@ -1,7 +1,6 @@
 ---
 title: Banana bread
 author: Sam
-lang: en
 tags: [dessert, baking]
 ingredients:
   - 3 ripe bananas

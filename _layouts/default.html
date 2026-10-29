@@ -1,47 +1,63 @@
 <!doctype html>
-<html lang="{{ page.lang | default: site.lang }}">
+{%- assign url_parts = page.url | split: "/" -%}
+{%- assign language = site.data.languages | where: "code", url_parts[1] | first -%}
+{%- comment -%} The same page in every language: a recipe's other versions, or the other home pages. {%- endcomment -%}
+{%- capture alternates %}{% endcapture -%}
+{%- capture options %}{% endcapture -%}
+{%- for l in site.data.languages -%}
+  {%- assign target = "/" | append: l.code | append: "/" -%}
+  {%- assign available = true -%}
+  {%- if page.collection == "recipes" -%}
+    {%- assign candidate = target | append: page.slug | append: ".html" -%}
+    {%- assign version = site.recipes | where: "url", candidate | first -%}
+    {%- if version -%}{%- assign target = candidate -%}{%- else -%}{%- assign available = false -%}{%- endif -%}
+  {%- endif -%}
+  {%- if available -%}
+    {%- capture alternates %}{{ alternates }}
+  <link rel="alternate" hreflang="{{ l.code }}" href="{{ target | absolute_url }}">{% endcapture -%}
+  {%- endif -%}
+  {%- capture options %}{{ options }}
+        <option value="{{ target | relative_url }}" lang="{{ l.code }}"{% if l.code == language.code %} selected{% endif %}>{{ l.name }}</option>{% endcapture -%}
+{%- endfor -%}
+{%- if page.ingredients -%}
+  {%- assign description = page.ingredients | join: ", " | truncate: 160 -%}
+{%- else -%}
+  {%- capture tagline %}{% include tagline.html %}{% endcapture -%}
+  {%- assign description = tagline | strip_html | normalize_whitespace -%}
+{%- endif %}
+<html lang="{{ language.code }}" dir="{{ language.dir | default: "ltr" }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {%- if page.ingredients -%}
-    {%- assign description = page.ingredients | join: ", " | truncate: 160 -%}
-  {%- else -%}
-    {%- assign description = page.description | default: site.description -%}
-  {%- endif %}
-  <title>{% if page.title %}{{ page.title | escape }} | {% endif %}{{ site.title | escape }}</title>
+  <title>{% if page.title %}{{ page.title | escape }} | {% endif %}{{ language.title | escape }}</title>
   <meta name="description" content="{{ description | escape }}">
   <link rel="canonical" href="{{ page.url | absolute_url }}">
+  {{- alternates }}
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="{{ site.title | escape }}">
-  <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+  <meta property="og:site_name" content="{{ language.title | escape }}">
+  <meta property="og:title" content="{{ page.title | default: language.title | escape }}">
   <meta property="og:description" content="{{ description | escape }}">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>
 </head>
 <body>
-  <header class="site-header" lang="{{ site.lang }}">
-    <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-    <form class="translate no-print" action="https://translate.google.com/translate" method="get" target="_top">
-      <input type="hidden" name="sl" value="auto">
-      <input type="hidden" name="u" value="{{ page.url | absolute_url }}">
-      <label for="translate-to" class="visually-hidden">Translate to</label>
-      <select id="translate-to" name="tl">
-        {% for language in site.data.languages %}
-        <option value="{{ language.code }}" lang="{{ language.code }}">{{ language.name }}</option>
-        {% endfor %}
+  <header class="site-header">
+    <a class="site-title" href="{{ '/' | append: language.code | append: '/' | relative_url }}">{{ language.title }}</a>
+    <label class="no-print">
+      <span class="visually-hidden">{{ language.language }}</span>
+      <select id="site-lang">{{ options }}
       </select>
-      <button type="submit">Translate</button>
-    </form>
+    </label>
   </header>
 
   <main>
     {{ content }}
   </main>
 
-  <footer class="site-footer" lang="{{ site.lang }}">
-    Recipes &copy; their authors, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-    &middot; Site code <a href="https://github.com/fagaki/fagaki.github.io/blob/main/LICENSE">Apache-2.0</a>
+  <footer class="site-footer">
+    {{ language.recipes_license }} <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+    &middot; {{ language.code_license }} <a href="https://github.com/fagaki/fagaki.github.io/blob/main/LICENSE">Apache-2.0</a>
   </footer>
 </body>
 </html>

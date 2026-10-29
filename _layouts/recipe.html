@@ -1,34 +1,39 @@
 ---
 layout: default
 ---
-{% assign language = site.data.languages | where: "code", page.lang | first %}
-<article class="recipe" dir="auto">
+{%- assign url_parts = page.url | split: "/" -%}
+{%- assign language = site.data.languages | where: "code", url_parts[1] | first -%}
+{%- assign home = "/" | append: language.code | append: "/" | relative_url -%}
+<article class="recipe">
   <h1>{{ page.title }}</h1>
 
-  <p class="meta" lang="{{ site.lang }}">
-    {% if page.author %}<span>by <strong lang="{{ page.lang }}">{{ page.author }}</strong></span>{% endif %}
-    <span>{{ language.name | default: page.lang }}</span>
-    {% for tag in page.tags %}<a class="tag" href="{{ '/' | relative_url }}?tag={{ tag | url_encode }}">{{ tag }}</a>{% endfor %}
+  <p class="meta">
+    {% if page.author %}<span>{{ language.by }} {{ page.author }}</span>{% endif %}
+    {% for tag in page.tags %}<a class="tag" href="{{ home }}?tag={{ tag | url_encode }}">{{ tag }}</a>{% endfor %}
   </p>
 
-  {% if page.ingredients %}
-  <section>
-    <h2 lang="{{ site.lang }}">Ingredients</h2>
-    <ul class="ingredients" id="ingredients">
-      {% for item in page.ingredients %}
-      <li><label><input type="checkbox"> <span>{{ item | escape }}</span></label></li>
-      {% endfor %}
-    </ul>
-    <button type="button" id="reset-ingredients" class="no-print" lang="{{ site.lang }}">Reset</button>
-  </section>
+  {% if page.translated_from %}
+  {% assign original = site.data.languages | where: "code", page.translated_from | first %}
+  <p class="note">
+    {{ language.original }}
+    <a href="{{ '/' | append: page.translated_from | append: '/' | append: page.slug | append: '.html' | relative_url }}" lang="{{ original.code }}">{{ original.name }}</a>
+  </p>
   {% endif %}
 
-  <section>
-    <h2 lang="{{ site.lang }}">Recipe</h2>
-    <div class="steps">
-      {{ content }}
-    </div>
-  </section>
+  {% if page.ingredients %}
+  <h2>{{ language.ingredients }}</h2>
+  <ul class="ingredients">
+    {% for item in page.ingredients %}
+    <li><label><input type="checkbox" data-index="{{ forloop.index0 }}"> <span>{{ item | escape }}</span></label></li>
+    {% endfor %}
+  </ul>
+  <button type="button" class="reset-ingredients no-print">{{ language.reset }}</button>
+  {% endif %}
+
+  <h2>{{ language.method }}</h2>
+  <div class="steps">
+    {{ content }}
+  </div>
 </article>
 
 <script type="application/ld+json">
@@ -36,7 +41,7 @@ layout: default
   "@context": "https://schema.org",
   "@type": "Recipe",
   "name": {{ page.title | jsonify }},
-  "inLanguage": {{ page.lang | jsonify }},
+  "inLanguage": {{ language.code | jsonify }},
   "url": {{ page.url | absolute_url | jsonify }},
   "recipeInstructions": {{ content | strip_html | normalize_whitespace | strip | jsonify }}
   {%- if page.author %},

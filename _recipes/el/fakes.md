@@ -1,8 +1,7 @@
 ---
 title: Φακές σούπα
 author: Ελένη
-lang: el
-tags: [soup, vegan]
+tags: [σούπα, βίγκαν]
 ingredients:
   - 500 γρ. φακές
   - 1 κρεμμύδι, ψιλοκομμένο

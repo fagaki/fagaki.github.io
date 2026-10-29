@@ -1,44 +1,29 @@
 ---
-layout: default
+layout: null
+sitemap: false
 ---
-{% assign recipes = site.recipes | sort_natural: "title" %}
-{% assign langs = site.recipes | map: "lang" | uniq | sort %}
-{% assign tags = "" | split: "" %}
-{% for recipe in site.recipes %}{% if recipe.tags %}{% assign tags = tags | concat: recipe.tags %}{% endif %}{% endfor %}
-{% assign tags = tags | uniq | sort_natural %}
-
-<h1>{{ site.title }}</h1>
-<p>{{ site.description }}</p>
-
-<div class="filters no-print">
-  <input type="search" id="search" placeholder="Search by name, ingredient or cook" aria-label="Search recipes">
-  <select id="filter-lang" aria-label="Language">
-    <option value="">All languages</option>
-    {% for code in langs %}
-    {% assign language = site.data.languages | where: "code", code | first %}
-    <option value="{{ code }}">{{ language.name | default: code }}</option>
-    {% endfor %}
-  </select>
-  <select id="filter-tag" aria-label="Tag">
-    <option value="">All tags</option>
-    {% for tag in tags %}
-    <option value="{{ tag }}">{{ tag }}</option>
-    {% endfor %}
-  </select>
-</div>
-
-<ul class="recipe-list" id="recipe-list">
-  {% for recipe in recipes %}
-  {% assign language = site.data.languages | where: "code", recipe.lang | first %}
-  <li data-lang="{{ recipe.lang }}"
-      data-tags="{{ recipe.tags | join: ',' | escape }}"
-      data-text="{{ recipe.title | escape }} {{ recipe.author | escape }} {{ recipe.tags | join: ' ' | escape }} {{ recipe.ingredients | join: ' ' | escape }}">
-    <a href="{{ recipe.url | relative_url }}" lang="{{ recipe.lang }}" dir="auto">{{ recipe.title }}</a>
-    <span class="meta">
-      {% if recipe.author %}by <span lang="{{ recipe.lang }}">{{ recipe.author }}</span> &middot; {% endif %}{{ language.name | default: recipe.lang }}
-      {% for tag in recipe.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
-    </span>
-  </li>
-  {% endfor %}
-</ul>
-<p id="no-results" hidden>No recipes match your search.</p>
+{%- assign default_home = "/" | append: site.default_language | append: "/" | relative_url -%}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ site.title }}</title>
+  <link rel="canonical" href="{{ default_home | absolute_url }}">
+  <script>
+    // Go to the language the visitor picked before, or the default one.
+    (function () {
+      var languages = {{ site.data.languages | map: "code" | jsonify }};
+      var lang = '{{ site.default_language }}';
+      try {
+        var saved = localStorage.getItem('site-lang');
+        if (languages.indexOf(saved) >= 0) lang = saved;
+      } catch (e) { /* storage blocked */ }
+      location.replace('{{ "/" | relative_url }}' + lang + '/' + location.search);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0; url={{ default_home }}">
+</head>
+<body>
+  <a href="{{ default_home }}">{{ site.title }}</a>
+</body>
+</html>

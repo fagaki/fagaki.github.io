@@ -1,0 +1,35 @@
+---
+layout: default
+---
+{%- assign url_parts = page.url | split: "/" -%}
+{%- assign language = site.data.languages | where: "code", url_parts[1] | first -%}
+{%- assign prefix = "/" | append: language.code | append: "/" -%}
+{%- assign recipes = site.recipes | where_exp: "recipe", "recipe.url contains prefix" | sort_natural: "title" -%}
+{%- assign tags = "" | split: "" -%}
+{%- for recipe in recipes -%}{%- if recipe.tags -%}{%- assign tags = tags | concat: recipe.tags -%}{%- endif -%}{%- endfor -%}
+{%- assign tags = tags | uniq | sort_natural %}
+<h1 class="tagline">{% include tagline.html %}</h1>
+
+<div class="filters no-print">
+  <input type="search" id="search" placeholder="{{ language.search }}" aria-label="{{ language.search }}">
+  <select id="filter-tag" aria-label="{{ language.all_tags }}">
+    <option value="">{{ language.all_tags }}</option>
+    {% for tag in tags %}
+    <option value="{{ tag }}">{{ tag }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<ul class="recipe-list" id="recipe-list">
+  {% for recipe in recipes %}
+  <li data-tags="{{ recipe.tags | join: ',' | escape }}"
+      data-text="{{ recipe.title | escape }} {{ recipe.author | escape }} {{ recipe.tags | join: ' ' | escape }} {{ recipe.ingredients | join: ' ' | escape }}">
+    <a href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a>
+    <span class="meta">
+      {% if recipe.author %}{{ language.by }} {{ recipe.author }}{% endif %}
+      {% for tag in recipe.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </span>
+  </li>
+  {% endfor %}
+</ul>
+<p id="no-results" hidden>{{ language.no_results }}</p>

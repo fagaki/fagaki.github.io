@@ -1,12 +1,11 @@
 ---
-title: Recipe name, in the recipe's language
-author: Cook's name
-lang: en              # language code: en, el, fr, de, it, es... (see _data/languages.yml)
-tags: [main, oven]    # short lowercase English words, so filtering works across languages
+title: Φακές σούπα                # in the recipe's language
+author: Ελένη
+tags: [σούπα, βίγκαν]             # short words in the recipe's language
 ingredients:
-  - 3 eggplants
-  - 500 g minced beef
-  - "Salt: to taste"  # put quotes around a line that contains a colon
+  - 500 γρ. φακές
+  - 1 κρεμμύδι
+  - "Αλάτι: όσο χρειάζεται"       # put quotes around a line that contains a colon
 ---
 
 1. First step...

@@ -1,48 +1,45 @@
-// Translate menu: preselect the visitor's browser language when it is offered.
+// Language menu: open the same page in the chosen language.
+// The choice is remembered, so https://fagaki.github.io/ opens in that language next time.
 (function () {
-  const select = document.getElementById('translate-to');
+  const select = document.getElementById('site-lang');
   if (!select) return;
-  const codes = Array.from(select.options, (o) => o.value.toLowerCase());
-  for (const lang of navigator.languages || [navigator.language || '']) {
-    const l = lang.toLowerCase();
-    const i = codes.includes(l) ? codes.indexOf(l) : codes.indexOf(l.split('-')[0]);
-    if (i >= 0) {
-      select.selectedIndex = i;
-      return;
-    }
-  }
+  select.addEventListener('change', () => {
+    try { localStorage.setItem('site-lang', select.selectedOptions[0].lang); } catch (e) { /* storage blocked */ }
+    location.href = select.value;
+  });
 })();
 
 // Recipe page: remember ticked ingredients in this browser.
+// All language versions list the same ingredients in the same order, so ticks are shared by
+// position across /el/fakes.html, /fr/fakes.html, ...
 (function () {
-  const list = document.getElementById('ingredients');
-  if (!list) return;
-  const key = 'recipe:' + location.pathname.replace(/\.html$/, '');
-  const boxes = list.querySelectorAll('input[type=checkbox]');
+  const boxes = document.querySelectorAll('.ingredients input[type=checkbox]');
+  if (!boxes.length) return;
+  const key = 'recipe:' + location.pathname.split('/').pop().replace(/\.html$/, '');
+  let checked = new Set();
+  try {
+    checked = new Set(JSON.parse(localStorage.getItem(key)) || []);
+  } catch (e) { /* storage blocked or corrupt */ }
 
-  function save() {
-    const checked = [];
-    boxes.forEach((box, i) => { if (box.checked) checked.push(i); });
+  function update() {
+    boxes.forEach((box) => { box.checked = checked.has(Number(box.dataset.index)); });
     try {
-      if (checked.length) localStorage.setItem(key, JSON.stringify(checked));
+      if (checked.size) localStorage.setItem(key, JSON.stringify([...checked].sort((a, b) => a - b)));
       else localStorage.removeItem(key);
     } catch (e) { /* storage blocked: ticks just won't persist */ }
   }
 
-  try {
-    (JSON.parse(localStorage.getItem(key)) || []).forEach((i) => {
-      if (boxes[i]) boxes[i].checked = true;
-    });
-  } catch (e) { /* storage blocked or corrupt */ }
-
-  list.addEventListener('change', save);
-  const reset = document.getElementById('reset-ingredients');
-  if (reset) {
-    reset.addEventListener('click', () => {
-      boxes.forEach((box) => { box.checked = false; });
-      save();
-    });
-  }
+  boxes.forEach((box) => box.addEventListener('change', () => {
+    const i = Number(box.dataset.index);
+    if (box.checked) checked.add(i);
+    else checked.delete(i);
+    update();
+  }));
+  document.querySelectorAll('.reset-ingredients').forEach((button) => button.addEventListener('click', () => {
+    checked.clear();
+    update();
+  }));
+  update();
 })();
 
 // Home page: search and filter the recipe list.
@@ -50,7 +47,6 @@
   const list = document.getElementById('recipe-list');
   if (!list) return;
   const search = document.getElementById('search');
-  const langSelect = document.getElementById('filter-lang');
   const tagSelect = document.getElementById('filter-tag');
   const noResults = document.getElementById('no-results');
 
@@ -60,18 +56,15 @@
   const items = Array.from(list.children, (li) => ({
     li,
     text: normalize(li.dataset.text),
-    lang: li.dataset.lang,
     tags: li.dataset.tags.toLowerCase().split(','),
   }));
 
   function apply() {
     const words = normalize(search.value).split(/\s+/).filter(Boolean);
-    const lang = langSelect.value;
     const tag = tagSelect.value.toLowerCase();
     let shown = 0;
     items.forEach((item) => {
       const match = words.every((w) => item.text.includes(w))
-        && (!lang || item.lang === lang)
         && (!tag || item.tags.includes(tag));
       item.li.hidden = !match;
       if (match) shown++;
@@ -79,12 +72,11 @@
     noResults.hidden = shown > 0;
   }
 
-  // Allow links like /?tag=soup or /?lang=el or /?q=lentils.
+  // Allow links like /en/?tag=soup or /en/?q=lentils.
   const params = new URLSearchParams(location.search);
   if (params.has('q')) search.value = params.get('q');
-  if (params.has('lang')) langSelect.value = params.get('lang');
   if (params.has('tag')) tagSelect.value = params.get('tag');
 
-  [search, langSelect, tagSelect].forEach((el) => el.addEventListener('input', apply));
+  [search, tagSelect].forEach((el) => el.addEventListener('input', apply));
   apply();
 })();

@@ -1,13 +1,15 @@
 title: Fagaki
-description: Home recipes from amateur cooks, in many languages.
 url: https://fagaki.github.io
 baseurl: ""
-lang: en
 
+# Where https://fagaki.github.io/ sends first-time visitors. Languages: _data/languages.yml
+default_language: el
+
+# _recipes/<language>/<name>.md is published at /<language>/<name>.html
 collections:
   recipes:
     output: true
-    permalink: /:name.html
+    permalink: /:path.html
 
 defaults:
   - scope:
@@ -15,13 +17,13 @@ defaults:
       type: recipes
     values:
       layout: recipe
-      lang: en
 
 plugins:
   - jekyll-sitemap
 
 exclude:
   - README.md
+  - CLAUDE.md
   - TEMPLATE.md
   - LICENSE
   - Gemfile

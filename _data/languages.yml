@@ -1,42 +1,125 @@
-# Languages offered in the translate menu and used as labels for the home page filter.
-# code: Google Translate / ISO 639-1 code · name: the language's own name
-- code: en
-  name: English
+# Site languages, in menu order.
+# code: ISO 639-1 code, also the URL prefix and the folder name in _recipes/ · name: the language's own name
+# dir: rtl for right-to-left scripts (default ltr) · fagaki: the word "Φαγάκι" in that language (home page line)
+# The other keys are the interface texts in that language.
 - code: el
   name: Ελληνικά
+  title: Φαγάκι
+  fagaki: Φαγάκι
+  language: Γλώσσα
+  search: Αναζήτηση με όνομα, υλικό ή μάγειρα
+  all_tags: Όλες οι ετικέτες
+  no_results: Καμία συνταγή δεν ταιριάζει με την αναζήτησή σας.
+  by: από
+  original: "Αρχική συνταγή:"
+  ingredients: Υλικά
+  method: Εκτέλεση
+  reset: Καθαρισμός
+  recipes_license: Συνταγές © των δημιουργών τους, με άδεια
+  code_license: Κώδικας ιστότοπου
+- code: en
+  name: English
+  title: Fagaki
+  fagaki: Little dish
+  language: Language
+  search: Search by name, ingredient or cook
+  all_tags: All tags
+  no_results: No recipes match your search.
+  by: by
+  original: "Original recipe:"
+  ingredients: Ingredients
+  method: Instructions
+  reset: Reset
+  recipes_license: Recipes © their authors, licensed
+  code_license: Site code
 - code: fr
   name: Français
+  title: Fagaki
+  fagaki: Petit plat
+  language: Langue
+  search: Rechercher par nom, ingrédient ou cuisinier
+  all_tags: Toutes les étiquettes
+  no_results: Aucune recette ne correspond à votre recherche.
+  by: par
+  original: "Recette originale :"
+  ingredients: Ingrédients
+  method: Préparation
+  reset: Réinitialiser
+  recipes_license: Recettes © leurs auteurs, sous licence
+  code_license: Code du site
 - code: de
   name: Deutsch
+  title: Fagaki
+  fagaki: Kleines Gericht
+  language: Sprache
+  search: Suche nach Name, Zutat oder Koch
+  all_tags: Alle Schlagwörter
+  no_results: Keine passenden Rezepte gefunden.
+  by: von
+  original: "Originalrezept:"
+  ingredients: Zutaten
+  method: Zubereitung
+  reset: Zurücksetzen
+  recipes_license: Rezepte © ihre Autorinnen und Autoren, lizenziert unter
+  code_license: Website-Code
 - code: it
   name: Italiano
+  title: Fagaki
+  fagaki: Piattino
+  language: Lingua
+  search: Cerca per nome, ingrediente o cuoco
+  all_tags: Tutte le etichette
+  no_results: Nessuna ricetta corrisponde alla ricerca.
+  by: di
+  original: "Ricetta originale:"
+  ingredients: Ingredienti
+  method: Preparazione
+  reset: Azzera
+  recipes_license: Ricette © dei rispettivi autori, con licenza
+  code_license: Codice del sito
 - code: es
   name: Español
+  title: Fagaki
+  fagaki: Comidita
+  language: Idioma
+  search: Buscar por nombre, ingrediente o cocinero
+  all_tags: Todas las etiquetas
+  no_results: Ninguna receta coincide con tu búsqueda.
+  by: de
+  original: "Receta original:"
+  ingredients: Ingredientes
+  method: Preparación
+  reset: Restablecer
+  recipes_license: Recetas © de sus autores, con licencia
+  code_license: Código del sitio
 - code: pt
   name: Português
-- code: nl
-  name: Nederlands
-- code: tr
-  name: Türkçe
-- code: ar
-  name: العربية
-- code: ru
-  name: Русский
-- code: uk
-  name: Українська
-- code: pl
-  name: Polski
-- code: ro
-  name: Română
-- code: bg
-  name: Български
-- code: sq
-  name: Shqip
-- code: hi
-  name: हिन्दी
-- code: zh-CN
-  name: 中文
-- code: ja
-  name: 日本語
-- code: ko
-  name: 한국어
+  title: Fagaki
+  fagaki: Comidinha
+  language: Idioma
+  search: Pesquisar por nome, ingrediente ou cozinheiro
+  all_tags: Todas as etiquetas
+  no_results: Nenhuma receita corresponde à sua pesquisa.
+  by: por
+  original: "Receita original:"
+  ingredients: Ingredientes
+  method: Preparação
+  reset: Limpar
+  recipes_license: Receitas © dos seus autores, com licença
+  code_license: Código do site
+- code: fa
+  dir: rtl
+  name: فارسی
+  title: فاگاکی
+  fagaki: غذای خانگی
+  language: زبان
+  search: جستجو بر اساس نام، مواد یا آشپز
+  all_tags: همه برچسب‌ها
+  no_results: هیچ دستور پختی با جستجوی شما پیدا نشد.
+  by: از
+  original: "دستور پخت اصلی:"
+  ingredients: مواد لازم
+  method: طرز تهیه
+  reset: پاک کردن
+  recipes_license: دستور پخت‌ها © متعلق به نویسندگانشان، با مجوز
+  code_license: کد سایت

@@ -71,8 +71,6 @@ button:hover { border-color: var(--accent); }
   text-decoration: none;
 }
 
-.translate { display: flex; gap: 0.4rem; }
-
 .site-footer {
   margin: 3rem 0 1.5rem;
   padding-top: 1rem;
@@ -84,9 +82,10 @@ button:hover { border-color: var(--accent); }
 /* Shared bits */
 h1 { line-height: 1.2; margin: 1.5rem 0 0.5rem; }
 h2 { margin-top: 2rem; font-size: 1.25rem; }
+h1.tagline { font-size: 1.5rem; }
 
 .meta { color: var(--muted); font-size: 0.9375rem; }
-.meta > * + * { margin-left: 0.6rem; }
+.meta > * + * { margin-inline-start: 0.6rem; }
 
 .tag {
   display: inline-block;
@@ -122,9 +121,11 @@ h2 { margin-top: 2rem; font-size: 1.25rem; }
   text-decoration: none;
 }
 
-.recipe-list .tag { margin-left: 0.3rem; }
+.recipe-list .tag { margin-inline-start: 0.3rem; }
 
 /* Recipe page */
+.recipe .note { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+
 .ingredients { list-style: none; padding: 0; }
 
 .ingredients label {
@@ -150,6 +151,7 @@ h2 { margin-top: 2rem; font-size: 1.25rem; }
 }
 
 .steps li { margin-bottom: 0.6rem; }
+.steps ol:lang(fa) { list-style-type: persian; }
 
 /* Print: just the recipe, black on white */
 @media print {
